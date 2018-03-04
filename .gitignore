@@ -1,0 +1,56 @@
+# Eclipse
+/.classpath
+/.project
+/.settings/
+
+# MacOS X
+.AppleDouble
+.DS_Store
+.LSOverride
+.Spotlight-V100
+.Trashes
+Icon
+
+# IDEA
+*.iml
+*.ipr
+*.iws
+rebel.xml
+.idea/
+
+# Maven
+target
+/tmp/
+/storageFileResource-dir/
+/application/
+/bin/
+/global-groovy.log
+/log/
+/logs/
+/rebel.xml
+/src/main/frontend/app/locales/translations.tsv
+/src/main/frontend/app/manifest.appcache
+/src/main/frontend/docs/partials/
+/src/main/frontend/docs/js/navigation.js
+/src/main/resources/static/
+/target-dist/
+/target/
+navajo.cookie
+
+.bowerrc
+.idea/misc.xml
+.idea/workspace.xml
+.sass-cache
+.tmp
+.vscode
+bower_components
+coverage
+dist
+docs/output
+node
+node_modules
+npm-debug.log
+debug.log
+phantomjsdriver.log
+report
+maven.log

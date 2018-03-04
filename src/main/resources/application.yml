@@ -1,0 +1,79 @@
+# Spring
+spring:
+  profiles:
+    active: default
+    include: infrastructure
+
+## Server
+server:
+  port: 8080
+
+## Info
+info:
+  build:
+    artifact: @project.artifactId@
+    name: @project.name@
+    description: @project.description@
+    version: @project.version@
+
+# Logging
+logging:
+  path: log/
+  level.root: warn
+
+# Security
+security:
+  user:
+    username: user
+    password: '{cipher}b90b4efc95fe1b35d1cdc0ee5a9297c759bbfe33ef798160a58a160de557f394'
+  basic:
+    enabled: false
+
+# Management
+management:
+  context-path: /manage
+  security:
+    enabled: false
+  info:
+     git:
+       mode: full
+  health:
+    refresh:
+      enabled: true
+
+# Endpoints
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    enabled: true
+    sensitive: false
+  logfile:
+    sensitive: false
+  security:
+    enabled: true
+
+
+
+## Hystrix
+hystrix:
+  shareSecurityContext: true
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 10000
+
+## Ribbon
+ribbon:
+  ReadTimeout: 100000
+  ConnectTimeout: 100000
+
+
+

@@ -1,0 +1,21 @@
+## Spring
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      name: api-gateway
+      discovery:
+        enabled: true
+        service-id: config-server
+      username: user
+      password: '{cipher}97913556dc691f8b86299b4b38171226e0e5b17a10e7affb036db364009bdbf5'
+      fail-fast: false
+
+## EUREKA
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVICE_URL:http://127.0.0.1:8761/eureka/}
+
+

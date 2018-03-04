@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ch.keepcalm.microservice</groupId>
+    <artifactId>api-gateway</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.10.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
+    <name>api-gateway</name>
+
+    <description>An API Gateway is a single point of entry (and control) for front end clients, which could be browser
+        based (like the examples in this article) or mobile. The client only has to know the URL of one server
+    </description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+
+        <!-- ================= Spring ===================== -->
+        <!-- Spring Cloud -->
+        <spring-cloud.version>Edgware.SR2</spring-cloud.version>
+
+        <!-- spring-boot-admin -->
+        <spring-boot-admin-starter-client.version>1.5.5</spring-boot-admin-starter-client.version>
+
+        <!-- ================= Package / Release ===================== -->
+        <!-- Package / Release -->
+        <jgitflow-maven-plugin.version>1.0-m5.1</jgitflow-maven-plugin.version>
+        <wagon-webdav-jackrabbit.version>2.4</wagon-webdav-jackrabbit.version>
+        <!-- Package / Release -->
+        <maven-site-plugin.version>3.4</maven-site-plugin.version>
+        <maven-resources-plugin.version>2.7</maven-resources-plugin.version>
+        <maven-javadoc-plugion>2.10.3</maven-javadoc-plugion>
+        <maven-deploy-plugin>2.8.2</maven-deploy-plugin>
+        <maven-source-plugin>2.4</maven-source-plugin>
+
+        <!-- ================= Test / CodeQuality  ===================== -->
+        <!-- JaCoCo-->
+        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
+        <argLine>-XX:PermSize=128m -XX:MaxPermSize=512m</argLine>
+        <!-- Coveralls -->
+        <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
+
+        <!-- =================  Documentation ================= -->
+        <!-- Asciidoc -->
+        <asciidoctor.maven.plugin.version>1.5.5</asciidoctor.maven.plugin.version>
+        <asciidoctor-pdf.version>1.5.0-alpha.10.1</asciidoctor-pdf.version>
+        <asciidoctor-diagram.version>1.5.0</asciidoctor-diagram.version>
+        <asciidoctor-outputDirectory>${project.basedir}/src/main/resources/static/manage/docs
+        </asciidoctor-outputDirectory>
+        <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
+        <!-- Gitlog-->
+        <gitlog-maven-plugin.version>1.13.6</gitlog-maven-plugin.version>
+        <gitlogDirectory>${project.build.directory}/generated-gitlog</gitlogDirectory>
+
+        <!-- ================= DEPENDENCIES ===================== -->
+        <!-- Dozer -->
+        <dozer.version>5.5.1</dozer.version>
+        <dozer-jdk8-support.version>1.0.3</dozer-jdk8-support.version>
+        <evo-inflector.version>1.2.2</evo-inflector.version>
+    </properties>
+    <!-- ================= DependencyManagement ===================== -->
+    <dependencyManagement>
+        <!-- SpringCloud -->
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- spring-boot-admin-starter-client -->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-starter-client</artifactId>
+                <version>${spring-boot-admin-starter-client.version}</version>
+            </dependency>
+
+            <!-- Dozer -->
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- dozer JDK8 -->
+            <dependency>
+                <groupId>io.craftsman</groupId>
+                <artifactId>dozer-jdk8-support</artifactId>
+                <version>${dozer-jdk8-support.version}</version>
+            </dependency>
+
+            <!-- EVO -->
+            <dependency>
+                <groupId>org.atteo</groupId>
+                <artifactId>evo-inflector</artifactId>
+                <version>${evo-inflector.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- ================= Spring-Boot basic ================= -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+
+        <!-- ================= Spring-Cloud  basic ===================== -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-ribbon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-security</artifactId>
+        </dependency>
+        <!-- ===== Spring-Cloud ZUUL ===== -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+        </dependency>
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- ================= Test Scope  DEPENDENCIES ===================== -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Rest-Docs -->
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+
+
+
+    <!-- ================= Build ===================== -->
+    <build>
+        <finalName>${project.name}-${project.version}</finalName>
+        <plugins>
+            <!-- spring-boot-maven -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- Git information -->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>${jgitflow-maven-plugin.version}</version>
+                <configuration>
+                    <pushFeatures>true</pushFeatures>
+                    <pushReleases>true</pushReleases>
+                    <pushHotfixes>true</pushHotfixes>
+                    <suppressFastForward>true</suppressFastForward>
+                    <scmCommentPrefix>jgf:</scmCommentPrefix>
+                    <!--enforce line ending-->
+                    <eol>lf</eol>
+                </configuration>
+            </plugin>
+
+            <!-- ===== Documentation ASCIIDOC ===== -->
+            <!-- Gitlog -->
+            <plugin>
+                <groupId>com.github.danielflower.mavenplugins</groupId>
+                <artifactId>gitlog-maven-plugin</artifactId>
+                <version>${gitlog-maven-plugin.version}</version>
+                <configuration>
+                    <verbose>false</verbose>
+                    <reportTitle>${project.version}</reportTitle>
+                    <issueManagementSystem>jira</issueManagementSystem>
+                    <issueManagementUrl>https://portal.helsana.ch/jira/browse/CONF/</issueManagementUrl>
+                    <fullGitMessage>false</fullGitMessage>
+                    <mergeCommitFilter>false</mergeCommitFilter>
+                    <!--<excludeCommitsPattern>^(?!Merge branch.*).*$</excludeCommitsPattern>-->
+                    <excludeCommitsPattern>^((?!MYH-.*).)*$</excludeCommitsPattern>
+                    <outputDirectory>${gitlogDirectory}</outputDirectory>
+                    <asciidocChangeLogFilename>releaseNotes.adoc</asciidocChangeLogFilename>
+                    <generatAsciidocChangeLog>true</generatAsciidocChangeLog>
+                    <generateJSONChangeLog>true</generateJSONChangeLog>
+                    <generateHTMLTableOnlyChangeLog>true</generateHTMLTableOnlyChangeLog>
+                    <generateMarkdownChangeLog>true</generateMarkdownChangeLog>
+                    <generateSimpleHTMLChangeLog>true</generateSimpleHTMLChangeLog>
+                    <generatePlainTextChangeLog>true</generatePlainTextChangeLog>
+                    <dateFormat>yyyy-MM-dd HH:mm</dateFormat>
+                    <asciidocTableView>true</asciidocTableView>
+                    <asciidocHeading>===</asciidocHeading>
+                    <asciidocTableViewHeader1>Date</asciidocTableViewHeader1>
+                    <asciidocTableViewHeader2>Merge</asciidocTableViewHeader2>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- AsciiDoc -->
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>${asciidoctor.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-docs</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/docs/asciidoc</sourceDirectory>
+                    <baseDir>${project.basedir}/src/docs/asciidoc-resources</baseDir>
+                    <backend>html5</backend>
+                    <doctype>book</doctype>
+                    <sourceDocumentName>manual.adoc</sourceDocumentName>
+                    <sourceHighlighter>coderay</sourceHighlighter>
+                    <requires>
+                        <require>asciidoctor-diagram</require>
+                    </requires>
+                    <attributes>
+                        <sectnums>true</sectnums>
+                        <snippets>${snippetsDirectory}</snippets>
+                        <imagesdir>images</imagesdir>
+                        <gitlogdir>${gitlogDirectory}</gitlogdir>
+                        <project-version>${project.version}</project-version>
+                        <project-name>${project.name}</project-name>
+                        <project-artifact-name>${project.name}-${project.version}</project-artifact-name>
+                    </attributes>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-diagram</artifactId>
+                        <version>${asciidoctor-diagram.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-pdf</artifactId>
+                        <version>${asciidoctor-pdf.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- Resources Plugin -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${asciidoctor-outputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-docs</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Site -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${maven-site-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <version>${asciidoctor.maven.plugin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- SureFire -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*Documentation.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <!-- Jacoco -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/ch/helsana/services/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>check-coverage</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <!-- Bundle -->
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <excludes>
+                                        <exclude>**/*Test*</exclude>
+                                        <exclude>**/*Documentation*</exclude>
+                                    </excludes>
+                                    <limits>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <!-- <minimum>0.60</minimum>-->
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <!-- Package -->
+                                <rule>
+                                    <element>PACKAGE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <!--<minimum>0.80</minimum>-->
+                                        </limit>
+                                        <limit>
+                                            <counter>CLASS</counter>
+                                            <value>MISSEDCOUNT</value>
+                                            <!--<maximum>0</maximum>-->
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <!-- Class -->
+                                <rule>
+                                    <element>CLASS</element>
+                                    <excludes>
+                                        <exclude>*Test*</exclude>
+                                    </excludes>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <!-- <minimum>0.50</minimum>-->
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- CODE COVERAGE PUBLISHER -->
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>${coveralls-maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+        <!-- Used for Nexus Upload -->
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav-jackrabbit</artifactId>
+                <version>${wagon-webdav-jackrabbit.version}</version>
+            </extension>
+        </extensions>
+    </build>
+</project>
