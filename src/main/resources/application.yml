@@ -40,6 +40,23 @@ management:
       base-path: /manage
 
 
-
+## Eureka
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    region: default
+    registry-fetch-interval-seconds: 10
+    instance-info-replication-interval-seconds: 10
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 10
+    prefer-ip-address: false
+    metadataMap:
+      instanceId: ${spring.application.name}:${spring.application.instance_id:${random.int}}
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.int}}
+    # Random Port Service have to configure the manage context path if not on root
+    status-page-url-path: ${management.endpoints.web.base-path}/info
+    health-check-url-path: ${management.endpoints.web.base-path}/health
 
 
