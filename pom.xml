@@ -116,6 +116,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-properties-migrator</artifactId>
+        </dependency>
+
         <!-- ================= Spring-Boot basic ================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
