@@ -8,6 +8,11 @@ spring:
       name: user
       password: '{cipher}b90b4efc95fe1b35d1cdc0ee5a9297c759bbfe33ef798160a58a160de557f394'
       roles: USER
+#  boot:
+#    admin:
+#      client:
+#        url: "http://localhost:8081"
+
 
 ## Server
 server:
@@ -38,6 +43,8 @@ management:
   endpoints:
     web:
       base-path: /manage
+      exposure:
+        include: "*"
 
 
 ## Eureka
